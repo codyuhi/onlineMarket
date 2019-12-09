@@ -1,7 +1,11 @@
 package com.example.onlinemarket;
 
 import android.util.Log;
+import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -49,6 +53,28 @@ public class ApiUtil {
         }
         finally {
             connection.disconnect();
+        }
+    }
+
+    public static void createAccountPOST(URL createAccountUrl, String username, String password) {
+        try {
+            String createAccountJsonString = "{\"username\": \"" +
+                    username +
+                    "\",\n\"password\": \"" +
+                    password + "\"}";
+//            JSONObject createAccountObject = new JSONObject(createAccountJsonString);
+            HttpURLConnection connection = (HttpURLConnection) createAccountUrl.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setDoOutput(true);
+            DataOutputStream write = new DataOutputStream(connection.getOutputStream());
+            write.writeBytes(createAccountJsonString);
+            write.flush();
+            write.close();
+//            Toast.makeText(getApplicationContext(), "Account creation failed at location 2", Toast.LENGTH_LONG).show();
+            Log.d("Response: ", connection.getResponseMessage() + "");
+        } catch (Exception e){
+            Log.d("Error: ", e.getMessage());
         }
     }
 }
