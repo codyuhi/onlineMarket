@@ -21,11 +21,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".loginPage"
-            android:parentActivityName=".MainActivity">
+        <activity android:name=".loginPage">
+
+        </activity>
+        <activity android:name=".CreateAccount"
+            android:parentActivityName=".loginPage">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value=".loginPage"/>
         </activity>
     </application>
 

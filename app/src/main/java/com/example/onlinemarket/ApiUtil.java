@@ -16,7 +16,7 @@ public class ApiUtil {
 
     public static final String PI_BASE_API_URL = "http://192.168.4.1:3000/";
     public static final String PC_BASE_API_URL = "http://localhost:3000/";
-    public static final String PC_REMOTE_BASE_API_URL = "http://192.168.1.193:3000/";
+    public static final String PC_REMOTE_BASE_API_URL = "http://10.37.71.248:3000/";
 
     public static URL buildUrl(String title) {
         String fullUrl = PC_REMOTE_BASE_API_URL + title;
