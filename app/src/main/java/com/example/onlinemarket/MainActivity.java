@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         mLoadingProgress.setVisibility(View.INVISIBLE);
 
         try {
-            URL queryURL = ApiUtil.buildUrl("");
+            URL queryURL = ApiUtil.buildUrl("checkConnection");
             new getProjects().execute(queryURL);
         } catch (Exception e ){
             Log.d("Error: ", e.getMessage());
