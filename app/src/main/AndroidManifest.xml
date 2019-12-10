@@ -22,7 +22,20 @@
             </intent-filter>
         </activity>
         <activity android:name=".loginPage">
-
+        </activity>
+        <activity android:name=".ViewAllProducts">
+        </activity>
+        <activity android:name=".ViewSingleProduct"
+            android:parentActivityName=".ViewAllProducts">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".loginPage"/>
+        </activity>
+        <activity android:name=".AddNewProduct"
+            android:parentActivityName=".ViewAllProducts">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".loginPage"/>
         </activity>
         <activity android:name=".CreateAccount"
             android:parentActivityName=".loginPage">
