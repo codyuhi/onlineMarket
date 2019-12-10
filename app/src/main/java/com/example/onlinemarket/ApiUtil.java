@@ -143,4 +143,9 @@ public class ApiUtil {
         }
         return null;
     }
+
+    public static String allProductsGET(URL getProductsUrl) {
+
+        return null;
+    }
 }
