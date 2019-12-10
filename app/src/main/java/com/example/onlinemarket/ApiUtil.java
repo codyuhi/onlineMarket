@@ -1,18 +1,27 @@
 package com.example.onlinemarket;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.Buffer;
 import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ApiUtil {
 
@@ -20,7 +29,8 @@ public class ApiUtil {
 
     public static final String PI_BASE_API_URL = "http://192.168.4.1:3000/";
     public static final String PC_BASE_API_URL = "http://localhost:3000/";
-    public static final String PC_REMOTE_BASE_API_URL = "http://192.168.1.15:3000/";
+    public static final String PC_REMOTE_BASE_API_URL = "http://192.168.1.193:3000/";
+    public static final String FILE_NAME = "auth.txt";
 
     public static URL buildUrl(String title) {
         String fullUrl = PC_REMOTE_BASE_API_URL + title;
@@ -56,7 +66,7 @@ public class ApiUtil {
         }
     }
 
-    public static String loginPOST(URL loginUrl, String username, String password) {
+    public static String loginPOST(URL loginUrl, String username, String password, Context ctx) {
         String loginJsonString = "{\"email\": \"" +
                 username +
                 "\",\"password\": \"" +
@@ -70,7 +80,29 @@ public class ApiUtil {
             write.writeBytes(loginJsonString);
             write.flush();
             write.close();
+            InputStreamReader read = new InputStreamReader(connection.getInputStream());
+            BufferedReader br = new BufferedReader(read);
+            String text = "";
+            String json_response = "";
+            while((text = br.readLine()) != null) {
+                json_response += text;
+            }
             Log.d("Response: ", connection.getResponseMessage() + "");
+
+            try {
+               FileOutputStream fOut = ctx.openFileOutput(FILE_NAME, MODE_PRIVATE);
+               fOut.write(json_response.getBytes());
+               fOut.close();
+            } catch (Exception e) {
+                Log.d("Error: ", e.getMessage());
+            } finally {
+                try {
+//                    fileOutputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
             return connection.getResponseMessage();
 
         } catch (Exception e) {
@@ -95,6 +127,13 @@ public class ApiUtil {
             write.writeBytes(createAccountJsonString);
             write.flush();
             write.close();
+            InputStreamReader read = new InputStreamReader(connection.getInputStream());
+            BufferedReader br = new BufferedReader(read);
+            String text = "";
+            String json_response = "";
+            while((text = br.readLine()) != null) {
+                json_response += text;
+            }
 //            Toast.makeText(getApplicationContext(), "Account creation failed at location 2", Toast.LENGTH_LONG).show();
 //            String test = connection.getResponseMessage();
             Log.d("Response: ", connection.getResponseMessage() + "");

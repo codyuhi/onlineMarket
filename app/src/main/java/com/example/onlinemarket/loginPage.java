@@ -49,10 +49,6 @@ public class loginPage extends AppCompatActivity {
                     } else {
                         try {
                             new loginPage.loginFunction().execute(username, password);
-                            if(globalResult.equals("OK")){
-                                Intent loginIntent = new Intent(loginPage.this, ViewAllProducts.class);
-                                startActivity(loginIntent);
-                            }
                         } catch (Exception e) {
                             Log.d("Error: ", e.getMessage());
                             Toast.makeText(loginPage.this, "Account login failed at location 1", Toast.LENGTH_LONG).show();
@@ -83,7 +79,7 @@ public class loginPage extends AppCompatActivity {
 
             try {
                 URL loginURL = ApiUtil.buildUrl("user/login");
-                result = ApiUtil.loginPOST(loginURL, username, password);
+                result = ApiUtil.loginPOST(loginURL, username, password, loginPage.this);
             } catch (Exception e ) {
                 Log.d("Error: ", e.getMessage());
             }
@@ -94,17 +90,31 @@ public class loginPage extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             mLoadingProgress.setVisibility(View.INVISIBLE);
-
-            if(result.equals("OK")) {
-                Toast.makeText(loginPage.this, "Successfully logged in!", Toast.LENGTH_LONG).show();
-            } else if(result.equals("Unauthorized")) {
-                Toast.makeText(loginPage.this, "Username/password combination not found.", Toast.LENGTH_LONG).show();
-            } else if(result.equals("Internal Server Error")){
-                Toast.makeText(loginPage.this, "Internal Server Error.  Verify that "+username+" is a valid email address.", Toast.LENGTH_LONG).show();
-            } else if(result.equals(null)){
-                Toast.makeText(loginPage.this, "Result returned NULL.", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(loginPage.this, "Result is "+result+" and typeOf result is " + result.getClass(), Toast.LENGTH_LONG).show();
+            try {
+                if(result == null){
+                    Toast.makeText(loginPage.this, "Username/password combination not found.", Toast.LENGTH_LONG).show();
+                } else {
+                    if(result.equals("OK")) {
+                        Toast.makeText(loginPage.this, "Successfully logged in!", Toast.LENGTH_LONG).show();
+                        try {
+                            Intent loginIntent = new Intent(loginPage.this, ViewAllProducts.class);
+                            startActivity(loginIntent);
+                        } catch (Exception e ) {
+                            Log.d("Error: ", e.getMessage());
+                            Toast.makeText(loginPage.this, "Username/password combination not found.", Toast.LENGTH_LONG).show();
+                        }
+                    } else if(result.equals("Unauthorized")) {
+                        Toast.makeText(loginPage.this, "Username/password combination not found.", Toast.LENGTH_LONG).show();
+                    } else if(result.equals("Internal Server Error")){
+                        Toast.makeText(loginPage.this, "Internal Server Error.  Verify that "+username+" is a valid email address.", Toast.LENGTH_LONG).show();
+                    } else if(result.equals(null)){
+                        Toast.makeText(loginPage.this, "Result returned NULL.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(loginPage.this, "Result is " + result + " and typeOf result is " + result.getClass(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            } catch (Exception e) {
+                Log.d("Error: ", e.getMessage());
             }
         }
 

@@ -63,10 +63,7 @@ public class CreateAccount extends AppCompatActivity {
                     } else {
                         try {
                             new createAccountFunction().execute(username,password);
-                            if(globalResult.equals("Created")){
-                                Intent loginIntent = new Intent(CreateAccount.this, ViewAllProducts.class);
-                                startActivity(loginIntent);
-                            }
+
                         } catch (Exception e) {
                             Log.d("Error: ", e.getMessage());
                             Toast.makeText(CreateAccount.this, "Account creation failed at location 1", Toast.LENGTH_LONG).show();
@@ -103,22 +100,89 @@ public class CreateAccount extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             mLoadingProgress.setVisibility(View.INVISIBLE);
-
-            if(result.equals("Created")) {
-                Toast.makeText(CreateAccount.this, "New Account created for "+username+".", Toast.LENGTH_LONG).show();
-            } else if(result.equals("Conflict")) {
-                Toast.makeText(CreateAccount.this, "Unable to create account with this email (Email already in use). "+username+".", Toast.LENGTH_LONG).show();
-            } else if(result.equals("Internal Server Error")){
-                Toast.makeText(CreateAccount.this, "Internal Server Error.  Verify that "+username+" is a valid email address.", Toast.LENGTH_LONG).show();
-            } else if(result.equals(null)){
-                Toast.makeText(CreateAccount.this, "Result returned NULL.", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(CreateAccount.this, "Result is "+result+" and typeOf result is " + result.getClass(), Toast.LENGTH_LONG).show();
+            try {
+                if(result == null){
+                    Toast.makeText(CreateAccount.this, "Please Enter a Valid Email Address and Password.", Toast.LENGTH_LONG).show();
+                } else {
+                    if(result.equals("Created")) {
+                        Toast.makeText(CreateAccount.this, "Account Created Successfully!", Toast.LENGTH_LONG).show();
+                        try {
+                            Intent loginIntent = new Intent(CreateAccount.this, ViewAllProducts.class);
+                            startActivity(loginIntent);
+                        } catch (Exception e ) {
+                            Log.d("Error: ", e.getMessage());
+                            Toast.makeText(CreateAccount.this, "Please Enter a Valid Email Address and Password.", Toast.LENGTH_LONG).show();
+                        }
+                    } else if(result.equals("Conflict")) {
+                        Toast.makeText(CreateAccount.this, "Please Enter a Valid Email Address and Password.", Toast.LENGTH_LONG).show();
+                    } else if(result.equals("Internal Server Error")){
+                        Toast.makeText(CreateAccount.this, "Internal Server Error.  Verify that "+username+" is a valid email address.", Toast.LENGTH_LONG).show();
+                    } else if(result.equals(null)){
+                        Toast.makeText(CreateAccount.this, "Result returned NULL.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(CreateAccount.this, "Result is " + result + " and typeOf result is " + result.getClass(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            } catch (Exception e) {
+                Log.d("Error: ", e.getMessage());
             }
         }
 
         @Override
         protected void onPreExecute() {
+            super.onPreExecute();
+            mLoadingProgress.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public class loginFunction extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... inputs) {
+            String result = null;
+
+            try {
+                URL loginURL = ApiUtil.buildUrl("user/login");
+                result = ApiUtil.loginPOST(loginURL, username, password, CreateAccount.this);
+            } catch (Exception e ) {
+                Log.d("Error: ", e.getMessage());
+            }
+            globalResult = result;
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            mLoadingProgress.setVisibility(View.INVISIBLE);
+            try {
+                if(result == null){
+                    Toast.makeText(CreateAccount.this, "Username/password combination not found.", Toast.LENGTH_LONG).show();
+                } else {
+                    if(result.equals("OK")) {
+                        Toast.makeText(CreateAccount.this, "Successfully logged in!", Toast.LENGTH_LONG).show();
+                        try {
+                            Intent loginIntent = new Intent(CreateAccount.this, ViewAllProducts.class);
+                            startActivity(loginIntent);
+                        } catch (Exception e ) {
+                            Log.d("Error: ", e.getMessage());
+                            Toast.makeText(CreateAccount.this, "Username/password combination not found.", Toast.LENGTH_LONG).show();
+                        }
+                    } else if(result.equals("Unauthorized")) {
+                        Toast.makeText(CreateAccount.this, "Username/password combination not found.", Toast.LENGTH_LONG).show();
+                    } else if(result.equals("Internal Server Error")){
+                        Toast.makeText(CreateAccount.this, "Internal Server Error.  Verify that "+username+" is a valid email address.", Toast.LENGTH_LONG).show();
+                    } else if(result.equals(null)){
+                        Toast.makeText(CreateAccount.this, "Result returned NULL.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(CreateAccount.this, "Result is " + result + " and typeOf result is " + result.getClass(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            } catch (Exception e) {
+                Log.d("Error: ", e.getMessage());
+            }
+        }
+
+        @Override
+        protected void onPreExecute(){
             super.onPreExecute();
             mLoadingProgress.setVisibility(View.VISIBLE);
         }
