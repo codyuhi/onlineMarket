@@ -55,7 +55,9 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             try {
-                Intent loginPageIntent = new Intent(MainActivity.this, loginPage.class);
+//                Testing intent
+                Intent loginPageIntent = new Intent(MainActivity.this, ViewAllProducts.class);
+//                Intent loginPageIntent = new Intent(MainActivity.this, loginPage.class);
 //                loginPageIntent.putExtra();
                 startActivity(loginPageIntent);
             } catch (Exception e) {

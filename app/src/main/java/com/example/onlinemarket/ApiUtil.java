@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.Buffer;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -29,7 +30,7 @@ public class ApiUtil {
 
     public static final String PI_BASE_API_URL = "http://192.168.4.1:3000/";
     public static final String PC_BASE_API_URL = "http://localhost:3000/";
-    public static final String PC_REMOTE_BASE_API_URL = "http://192.168.1.193:3000/";
+    public static final String PC_REMOTE_BASE_API_URL = "http://192.168.1.16:3000/";
     public static final String FILE_NAME = "auth.txt";
 
     public static URL buildUrl(String title) {
@@ -144,8 +145,25 @@ public class ApiUtil {
         return null;
     }
 
-    public static String allProductsGET(URL getProductsUrl) {
+    public static String allProductsGET(URL getProductsUrl) throws IOException {
 
+        HttpURLConnection connection = (HttpURLConnection) getProductsUrl.openConnection();
+
+        try{
+            InputStream stream = connection.getInputStream();
+            Scanner scanner = new Scanner(stream);
+            scanner.useDelimiter("\\A");
+            boolean hasData = scanner.hasNext();
+            if(hasData){
+                return scanner.next();
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            Log.d("Error: ", e.getMessage());
+        }finally{
+            connection.disconnect();
+        }
         return null;
     }
 }

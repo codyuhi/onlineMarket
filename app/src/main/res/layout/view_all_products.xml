@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_fullList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </androidx.recyclerview.widget.RecyclerView>
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/rv_fullList"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
+<!--    </androidx.recyclerview.widget.RecyclerView>-->
 
     <ProgressBar
         android:id="@+id/mLoadingProgress"
@@ -27,8 +27,8 @@
         android:layout_height="wrap_content"
         android:text="There are no products for sale!"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/rv_fullList"
-        app:layout_constraintStart_toStartOf="@+id/rv_fullList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
