@@ -1,3 +1,6 @@
+// This file is an architect which has no functionality at the moment
+// It may be expanded upon in a future iteration
+
 package com.example.onlinemarket;
 
 import android.content.Context;
