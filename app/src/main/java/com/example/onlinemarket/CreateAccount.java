@@ -65,7 +65,7 @@ public class CreateAccount extends AppCompatActivity {
                     } else {
                         try {
                             new createAccountFunction().execute(username,password);
-
+                            new loginFunction().execute(username,password);
                         } catch (Exception e) {
                             Log.d("Error: ", e.getMessage());
                             Toast.makeText(CreateAccount.this, "Account creation failed at location 1", Toast.LENGTH_LONG).show();
@@ -109,9 +109,8 @@ public class CreateAccount extends AppCompatActivity {
                     if(result.equals("Created")) {
                         Toast.makeText(CreateAccount.this, "Account Created Successfully!", Toast.LENGTH_LONG).show();
                         try {
-                            
-                            Intent loginIntent = new Intent(CreateAccount.this, ViewAllProducts.class);
-                            startActivity(loginIntent);
+//                            Intent loginIntent = new Intent(CreateAccount.this, ViewAllProducts.class);
+//                            startActivity(loginIntent);
                         } catch (Exception e ) {
                             Log.d("Error: ", e.getMessage());
                             Toast.makeText(CreateAccount.this, "Please Enter a Valid Email Address and Password.", Toast.LENGTH_LONG).show();
@@ -160,7 +159,7 @@ public class CreateAccount extends AppCompatActivity {
                 if(result == null){
                     Toast.makeText(CreateAccount.this, "Username/password combination not found.", Toast.LENGTH_LONG).show();
                 } else {
-                    if(result.equals("OK")) {
+                    if(result != null) {
                         Toast.makeText(CreateAccount.this, "Successfully logged in!", Toast.LENGTH_LONG).show();
                         try {
                             JSONObject token = new JSONObject(result);

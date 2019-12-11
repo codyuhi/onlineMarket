@@ -93,7 +93,7 @@ public class ViewAllProducts extends AppCompatActivity {
 //                    noDataTextView.setVisibility(View.VISIBLE);
                     Toast.makeText(ViewAllProducts.this, "Unable to get product list data", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(ViewAllProducts.this, "Product list data obtained successfully!", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(ViewAllProducts.this, "Product list data obtained successfully!", Toast.LENGTH_LONG).show();
                     noDataTextView.setText(result);
 //                    noDataTextView.setVisibility(View.VISIBLE);
 

@@ -15,6 +15,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.Buffer;
@@ -217,5 +219,38 @@ public class ApiUtil {
             Log.d("Error: ", e.getMessage());
         }
         return null;
+    }
+
+    public static String productDELETE(URL deleteUrl) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) deleteUrl.openConnection();
+        try{
+            connection.setDoInput(true);
+            connection.setInstanceFollowRedirects(false);
+            connection.setRequestMethod("DELETE");
+            connection.setRequestProperty("Authorization", ViewAllProducts.auth);
+            connection.setUseCaches(false);
+        } catch (Exception e) {
+            Log.d("Error: ", e.getMessage());
+        }
+        return connection.getResponseMessage();
+    }
+
+    public static String editPUT(URL putUrl, String propName, String productValue) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) putUrl.openConnection();
+        String putJson = "[{\"propName\": \"" +
+                propName + "\",\"value\": \"" +
+                productValue + "\"}]";
+        try{
+            connection.setDoInput(true);
+            connection.setRequestMethod("PUT");
+            connection.setRequestProperty("Authorization", ViewAllProducts.auth);
+            connection.setRequestProperty("Content-Type", "application/json");
+            OutputStreamWriter write = new OutputStreamWriter(connection.getOutputStream());
+            write.write(putJson);
+            write.close();
+        } catch (Exception e) {
+            Log.d("Error: ", e.getMessage());
+        }
+        return connection.getResponseMessage();
     }
 }

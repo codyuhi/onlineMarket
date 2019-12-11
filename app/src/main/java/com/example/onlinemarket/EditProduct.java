@@ -14,17 +14,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.net.URL;
 
-public class AddNewProduct extends AppCompatActivity {
+public class EditProduct extends AppCompatActivity {
 
     private ProgressBar mLoadingProgress;
     public EditText productName;
     public EditText productPrice;
     public Button button;
+    public Integer count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_new_product);
+        setContentView(R.layout.edit_product);
 
         try{
             productName = (EditText) findViewById(R.id.productName);
@@ -32,6 +33,7 @@ public class AddNewProduct extends AppCompatActivity {
             button = (Button) findViewById(R.id.button);
             mLoadingProgress = (ProgressBar) findViewById(R.id.mLoadingProgress);
             mLoadingProgress.setVisibility(View.INVISIBLE);
+            count = 0;
         } catch (Exception e) {
             Log.d("Error: ", e.getMessage());
         }
@@ -39,15 +41,8 @@ public class AddNewProduct extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener(){
             public void onClick(View arg0) {
                 try {
-//                    Float test;
-//                    try{
-//                        test = Float.parseFloat(productPrice.toString());
-//                    } catch (Exception e){
-//                        Log.d("Error: ",e.getMessage());
-//                        return;
-//                    }
                     try {
-                        new AddNewProduct.submitProduct().execute(productName.getText().toString(), productPrice.getText().toString());
+                        new EditProduct.submitProduct().execute("name", productName.getText().toString());
                     } catch (Exception e) {
                         Log.d("Error: ", e.getMessage());
                     }
@@ -64,8 +59,9 @@ public class AddNewProduct extends AppCompatActivity {
             String result = null;
 
             try {
-                URL addUrl = ApiUtil.buildUrl("products");
-                result = ApiUtil.addPOST(addUrl, inputs[0], inputs[1]);
+                Intent grabIntent = getIntent();
+                URL addUrl = ApiUtil.buildUrl("products/" + grabIntent.getStringExtra("productId"));
+                result = ApiUtil.editPUT(addUrl, inputs[0], inputs[1]);
             } catch (Exception e) {
                 Log.d("Error: ", e.getMessage());
             }
@@ -76,8 +72,19 @@ public class AddNewProduct extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             mLoadingProgress.setVisibility(View.INVISIBLE);
-            Intent returnIntent = new Intent(AddNewProduct.this, ViewAllProducts.class);
-            startActivity(returnIntent);
+            if(result.equals("Forbidden")){
+                Toast.makeText(EditProduct.this, "You do not have permissions to change this product.",Toast.LENGTH_LONG).show();
+                Intent returnIntent = new Intent(EditProduct.this, ViewAllProducts.class);
+                startActivity(returnIntent);
+            } else {
+                count++;
+                if(count >= 2){
+                    Intent returnIntent = new Intent(EditProduct.this, ViewAllProducts.class);
+                    startActivity(returnIntent);
+                } else {
+                    new EditProduct.submitProduct().execute("price", productPrice.getText().toString());
+                }
+            }
         }
 
         @Override

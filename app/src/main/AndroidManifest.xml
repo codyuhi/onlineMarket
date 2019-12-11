@@ -45,6 +45,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".loginPage"/>
         </activity>
+        <activity android:name=".EditProduct"
+            android:parentActivityName=".ViewAllProducts">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ViewAllProducts"/>
+        </activity>
     </application>
 
 </manifest>

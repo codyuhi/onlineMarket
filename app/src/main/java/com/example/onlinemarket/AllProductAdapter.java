@@ -70,7 +70,7 @@ public class AllProductAdapter extends RecyclerView.Adapter<AllProductAdapter.Fu
             try{
                 fullListName.setText(Character.toUpperCase(fullListPoke.name.charAt(0))
                         + fullListPoke.name.substring(1));
-                fullListId.setText("Price: " + Float.toString(fullListPoke.price));
+                fullListId.setText("Price: $" + Float.toString(fullListPoke.price));
             } catch(Exception e){
                 Log.d("Error: ", e.getMessage());
             }
