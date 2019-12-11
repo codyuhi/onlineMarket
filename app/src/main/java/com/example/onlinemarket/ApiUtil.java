@@ -278,27 +278,40 @@ public class ApiUtil {
                 return null;
             }
         } catch (Exception e) {
+            // Log any errors
             Log.d("Error: ", e.getMessage());
         }
         return null;
     }
 
+// this method handles POST requests to add products
     public static String addPOST(URL addUrl, String name, String price) {
+        // try/catch to handle connection exceptions
         try{
+            // open the http connection to the given URL
             HttpURLConnection connection = (HttpURLConnection) addUrl.openConnection();
+            // Define the request method to POST
             connection.setRequestMethod("POST");
+            // Define the content-type to be json
             connection.setRequestProperty("Content-Type","application/json");
+            // Pass the authorization header token
             connection.setRequestProperty("Authorization", ViewAllProducts.auth);
+            // do the thing
             connection.setDoOutput(true);
+            // Open output stream from the http url connection
             DataOutputStream write = new DataOutputStream(connection.getOutputStream());
+            // write the prepared json message to the output stream
             write.writeBytes(
                     "{\"name\": \"" +
                     name +
                     "\", \"price\": \"" +
                     price +
                     "\"}");
+            // flush the output stream
             write.flush();
+            // close the output stream
             write.close();
+            // This code below was removed because I didn't need any response other than the response message
 //            InputStreamReader read = new InputStreamReader(connection.getInputStream());
 //            BufferedReader br = new BufferedReader(read);
 //            String text = "";
@@ -306,44 +319,71 @@ public class ApiUtil {
 //            while((text = br.readLine()) != null) {
 //                json_response += text;
 //            }
+            // log the connection response message
             Log.d("Response: ", connection.getResponseMessage() + "");
+            // return the connection's getresponse message
             return connection.getResponseMessage();
         } catch (Exception e) {
+            // log any errors
             Log.d("Error: ", e.getMessage());
         }
+        // If the above code failed, return null
         return null;
     }
 
+// This method handles DELETE requests to delete products
     public static String productDELETE(URL deleteUrl) throws IOException {
+        // open a http connection with the given url
         HttpURLConnection connection = (HttpURLConnection) deleteUrl.openConnection();
+        // try/catch to handle the connection errors, if any
         try{
+            // do stuff
             connection.setDoInput(true);
+            // I added this because i saw it in a tutorial
             connection.setInstanceFollowRedirects(false);
+            // set request method to be DELETE
             connection.setRequestMethod("DELETE");
+            // pass the authentication token in the header
             connection.setRequestProperty("Authorization", ViewAllProducts.auth);
+            // I added this because I saw it in a tutorial
             connection.setUseCaches(false);
         } catch (Exception e) {
+            // log any errors
             Log.d("Error: ", e.getMessage());
         }
+        // return the connection response message
         return connection.getResponseMessage();
     }
 
+// This method handles PUT requests to edit existing products
     public static String editPUT(URL putUrl, String propName, String productValue) throws IOException {
+        // open an http connection with the given url
         HttpURLConnection connection = (HttpURLConnection) putUrl.openConnection();
+        // prepare the json data that will be passed in the PUT request
         String putJson = "[{\"propName\": \"" +
                 propName + "\",\"value\": \"" +
                 productValue + "\"}]";
+        // try/catch block to catch any connection errors
         try{
+            // do stuff
             connection.setDoInput(true);
+            // set the request method to PUT
             connection.setRequestMethod("PUT");
+            // pass the authentication token in the header
             connection.setRequestProperty("Authorization", ViewAllProducts.auth);
+            // Set the content-type to json
             connection.setRequestProperty("Content-Type", "application/json");
+            // open an output stream on the http url connection
             OutputStreamWriter write = new OutputStreamWriter(connection.getOutputStream());
+            // write the prepared string to the outputstream
             write.write(putJson);
+            // close the output stream
             write.close();
         } catch (Exception e) {
+            // log any errors
             Log.d("Error: ", e.getMessage());
         }
+        // return the connection response message
         return connection.getResponseMessage();
     }
 }
