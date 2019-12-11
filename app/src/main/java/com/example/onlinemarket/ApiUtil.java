@@ -2,6 +2,7 @@ package com.example.onlinemarket;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -34,7 +35,8 @@ public class ApiUtil {
     public static final String FILE_NAME = "auth.txt";
 
     public static URL buildUrl(String title) {
-        String fullUrl = PC_REMOTE_BASE_API_URL + title;
+//        String fullUrl = PC_REMOTE_BASE_API_URL + title;
+        String fullUrl = PI_BASE_API_URL + title;
         URL url = null;
 
         try {
@@ -104,8 +106,8 @@ public class ApiUtil {
                 }
             }
 
-            return connection.getResponseMessage();
-
+//            return connection.getResponseMessage();
+            return json_response;
         } catch (Exception e) {
             Log.d("Error: ", e.getMessage());
         }
@@ -163,6 +165,56 @@ public class ApiUtil {
             Log.d("Error: ", e.getMessage());
         }finally{
             connection.disconnect();
+        }
+        return null;
+    }
+
+    public static String singleProductGET(URL getProductUrl) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) getProductUrl.openConnection();
+
+        try {
+            InputStream stream = connection.getInputStream();
+            Scanner scanner = new Scanner(stream);
+            scanner.useDelimiter("\\A");
+            boolean hasData = scanner.hasNext();
+            if(hasData){
+                return scanner.next();
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            Log.d("Error: ", e.getMessage());
+        }
+        return null;
+    }
+
+    public static String addPOST(URL addUrl, String name, String price) {
+        try{
+            HttpURLConnection connection = (HttpURLConnection) addUrl.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type","application/json");
+            connection.setRequestProperty("Authorization", ViewAllProducts.auth);
+            connection.setDoOutput(true);
+            DataOutputStream write = new DataOutputStream(connection.getOutputStream());
+            write.writeBytes(
+                    "{\"name\": \"" +
+                    name +
+                    "\", \"price\": \"" +
+                    price +
+                    "\"}");
+            write.flush();
+            write.close();
+//            InputStreamReader read = new InputStreamReader(connection.getInputStream());
+//            BufferedReader br = new BufferedReader(read);
+//            String text = "";
+//            String json_response ="";
+//            while((text = br.readLine()) != null) {
+//                json_response += text;
+//            }
+            Log.d("Response: ", connection.getResponseMessage() + "");
+            return connection.getResponseMessage();
+        } catch (Exception e) {
+            Log.d("Error: ", e.getMessage());
         }
         return null;
     }

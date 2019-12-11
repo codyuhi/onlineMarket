@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONObject;
+
 import java.net.URL;
 
 public class loginPage extends AppCompatActivity {
@@ -94,10 +96,16 @@ public class loginPage extends AppCompatActivity {
                 if(result == null){
                     Toast.makeText(loginPage.this, "Username/password combination not found.", Toast.LENGTH_LONG).show();
                 } else {
-                    if(result.equals("OK")) {
+                    if(result != null) {
                         Toast.makeText(loginPage.this, "Successfully logged in!", Toast.LENGTH_LONG).show();
                         try {
+//                            Toast.makeText(loginPage.this, result, Toast.LENGTH_LONG).show();
+
+                            JSONObject token = new JSONObject(result);
+
+
                             Intent loginIntent = new Intent(loginPage.this, ViewAllProducts.class);
+                            loginIntent.putExtra("token","Bearer " + token.getString("token"));
                             startActivity(loginIntent);
                         } catch (Exception e ) {
                             Log.d("Error: ", e.getMessage());

@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONObject;
+
 import java.net.URL;
 import java.util.prefs.PreferenceChangeEvent;
 
@@ -107,6 +109,7 @@ public class CreateAccount extends AppCompatActivity {
                     if(result.equals("Created")) {
                         Toast.makeText(CreateAccount.this, "Account Created Successfully!", Toast.LENGTH_LONG).show();
                         try {
+                            
                             Intent loginIntent = new Intent(CreateAccount.this, ViewAllProducts.class);
                             startActivity(loginIntent);
                         } catch (Exception e ) {
@@ -160,7 +163,9 @@ public class CreateAccount extends AppCompatActivity {
                     if(result.equals("OK")) {
                         Toast.makeText(CreateAccount.this, "Successfully logged in!", Toast.LENGTH_LONG).show();
                         try {
+                            JSONObject token = new JSONObject(result);
                             Intent loginIntent = new Intent(CreateAccount.this, ViewAllProducts.class);
+                            loginIntent.putExtra("token","Bearer " + token.getString("token"));
                             startActivity(loginIntent);
                         } catch (Exception e ) {
                             Log.d("Error: ", e.getMessage());
