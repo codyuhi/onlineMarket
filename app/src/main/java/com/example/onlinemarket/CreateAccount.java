@@ -49,7 +49,7 @@ public class CreateAccount extends AppCompatActivity {
 // create username that is publicly accessible
     public String username = "";
     // create password that is publicly accessible
-    public String password = ""
+    public String password = "";
 
 // onCreate runs when the class is instantiated
     @Override
