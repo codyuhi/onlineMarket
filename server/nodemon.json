@@ -1,0 +1,7 @@
+{
+    "env": {
+        "MONGO_ATLAS_PW": "1ZVryylrv6s7ox2hS9^#fT7a3*WJh",
+        "MONGO_ATLAS_PW_ENCODED":"1ZVryylrv6s7ox2hS9%5E%23fT7a3%2AWJh",
+        "JWT_KEY": "ItoAngSusiSaAkingApiPagtawag"
+    }
+}
